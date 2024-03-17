@@ -1,54 +1,51 @@
+""""
+Example of Conftest file
+If we define the variables in the pytest_configure,those will be accessible
+across all the test files.
+"""
 import pytest
-import smtplib
 
 
-@pytest.fixture(scope="session")
-def get_api_token():
-    print("Called Before the Session")
-    yield "token_value"
-    print("Called after the Session")
+def pytest_configure():
+    pytest.weekdays1 = ["mon", "tue", "wed"]
+    pytest.weekdays2 = ["fri", "sat", "sun"]
 
 
-@pytest.fixture(scope="class")
-def check_api_token_status():
-    print("Calling Before the Class")
-    print("Checking API Token Status and Returning Value")
-    print(f"Printing the Token Status")
-    yield True
-    print("Calling After the End of Class")
+@pytest.fixture(scope="module")
+def setup01():
+    print("\n Fixture setup01 Opening")
+    wk = pytest.weekdays1.copy()
+    wk.append("thur")
+    yield wk
+    print("\n Fixture setup01 Closing")
 
 
-"""
-Function Level Fixture
-"""
+@pytest.fixture()
+def setup02():
+    wk2 = pytest.weekdays2.copy()
+    wk2.insert(0, "thur")
+    yield wk2
 
 
-@pytest.fixture(scope='function', autouse=True)
-def smtp_connection() -> smtplib.SMTP:
-    """
-    A fixture to create an SMTP connection.
-
-    Returns:
-        An SMTP connection
-    """
-    print("SMTP Connection fixture start")
-    yield smtplib.SMTP("smtp.gmail.com", 587, timeout=60)
-    print("SMTP Connection Tear Down")
-
+@pytest.fixture()
+def setup04(request):
+    mon = getattr(request.module, "mon")
+    print("\n Fixture Setup04 \n")
+    print("\n Fixture Scope: " + str(request.scope))
+    print("\n Function Name: " + str(request.function.__name__))
+    print("\n Module Name: " + str(request.module.__name__))
+    mon.append("April")
+    yield mon
 
 """
-Module Level Fixture
+Below are factories of fixtures, which will call function and based on the function call
+we are returning the data
 """
-
-
-@pytest.fixture(scope='module', autouse=True)
-def smtp_connection_module() -> smtplib.SMTP:
-    """
-    A fixture to create an SMTP connection.
-
-    Returns:
-        An SMTP connection
-    """
-    print("SMTP Connection fixture start")
-    yield smtplib.SMTP("smtp.gmail.com", 587, timeout=60)
-    print("SMTP Connection Tear Down")
+@pytest.fixture()
+def setup05():
+    def get_structure(name):
+        if name == 'list':
+            return [1, 2, 3]
+        if name == 'tuple':
+            return (1, 2, 3)
+    return get_structure

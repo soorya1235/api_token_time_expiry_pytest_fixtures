@@ -1,8 +1,7 @@
 ##importing 123#conftest from pytest
 #merge conflicts
-from Pytest import conftest
+from Pytest.conftestfolder import conftest
 
-import conftest
 
 def test_one():
     a = conftest.TEST
