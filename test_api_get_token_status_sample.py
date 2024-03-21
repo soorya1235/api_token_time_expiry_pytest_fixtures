@@ -7,8 +7,9 @@ class TestAPI:
 
     def test_pre_setup(self, get_api_token, check_api_token_status):
         print("Setup Class Called")
-        self.api_token = get_api_token
-        self.api_token_status = check_api_token_status
+        TestAPI.api_token = get_api_token
+        TestAPI.api_token_status = check_api_token_status
+        # breakpoint()
 
     def test_api1(self):
         print("API 1 testing")

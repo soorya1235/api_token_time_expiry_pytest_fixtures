@@ -1,2 +1,3 @@
 import pytest
-pytestmark = [pytest.mark.smoke,pytest.mark.]
+
+pytestmark = [pytest.mark.smoke, pytest.mark]

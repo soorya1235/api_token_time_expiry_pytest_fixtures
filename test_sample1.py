@@ -1,5 +1,5 @@
 ##importing 123#conftest from pytest
-#merge conflicts
+# merge conflicts
 from Pytest.conftestfolder import conftest
 
 
